@@ -5,8 +5,8 @@ WORKDIR /app
 
 COPY package*.json ./
 
-# Force lockfile regeneration to apply 'overrides' for tar
-RUN npm install --package-lock-only && npm install
+# Force regeneration of lockfile to pull new mongoose version and tar override
+RUN npm install --package-lock-only && npm update mongoose tar && npm install
 
 COPY . .
 
@@ -19,9 +19,6 @@ RUN apt-get update && apt-get upgrade -y && rm -rf /var/lib/apt/lists/*
 WORKDIR /app
 
 COPY --from=backend-builder /app .
-
-# Remove esbuild or unused build binaries from runtime container if present
-RUN rm -rf node_modules/@esbuild
 
 COPY .env.docker .env
 
