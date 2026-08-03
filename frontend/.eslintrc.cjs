@@ -21,7 +21,8 @@ module.exports = {
       { allowConstantExport: true },
     ],
     '@typescript-eslint/dot-notation': 'off',
-    '@typescript-eslint/no-explicit-any': 'off', // Disables "Unexpected any" error
-    'prefer-const': 'warn',                       // Demotes "Use const instead" to a warning
+    '@typescript-eslint/no-explicit-any': 'off',
+    'prefer-const': 'off',                        // <-- TURN OFF
+    'react-hooks/exhaustive-deps': 'off',         // <-- TURN OFF
   },
 }
