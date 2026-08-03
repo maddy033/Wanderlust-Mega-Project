@@ -1,0 +1,50 @@
+name: Docker Security Scan
+
+on:
+  workflow_call:
+  workflow_dispatch:
+
+jobs:
+  docker-scan-frontend:
+    name: Scan Frontend Image
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Build Frontend Docker Image
+        run: |
+          docker build -t wanderlust-frontend:latest ./frontend
+
+      - name: Run Trivy Scanner on Frontend Image
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: 'wanderlust-frontend:latest'
+          format: 'table'
+          exit-code: '1'
+          ignore-unfixed: true
+          vuln-type: 'os,library'
+          severity: 'CRITICAL'
+
+  docker-scan-backend:
+    name: Scan Backend Image
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Build Backend Docker Image
+        run: |
+          docker build -t wanderlust-backend:latest ./backend
+
+      - name: Run Trivy Scanner on Backend Image
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: 'wanderlust-backend:latest'
+          format: 'table'
+          exit-code: '1'
+          ignore-unfixed: true
+          vuln-type: 'os,library'
+          severity: 'CRITICAL'
