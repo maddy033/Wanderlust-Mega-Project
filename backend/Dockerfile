@@ -3,10 +3,12 @@ FROM node:21 AS backend-builder
 
 WORKDIR /app
 
-# Copy ONLY package.json to ignore stale lockfiles
 COPY package.json ./
 
-# Clean fresh install forcing tar upgrade
+# Upgrade global npm (patches internal npm/node_modules/tar)
+RUN npm install -g npm@latest
+
+# Install fresh dependencies
 RUN npm install tar@^7.5.19 && npm install
 
 COPY . .
@@ -14,8 +16,9 @@ COPY . .
 # ------------------- Stage 2: Final Stage ------------------------------
 FROM node:21-slim
 
-# Upgrade base OS packages
+# Upgrade base OS packages & update global npm inside final container
 RUN apt-get update && apt-get upgrade -y && rm -rf /var/lib/apt/lists/*
+RUN npm install -g npm@latest
 
 WORKDIR /app
 
