@@ -1,0 +1,47 @@
+name: Dependency Scan
+
+on:
+  workflow_dispatch:
+
+jobs:
+  npm-audit:
+    name: Frontend (Node.js/TypeScript) Audit
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Audit Frontend Dependencies
+        run: |
+          cd frontend
+          npm audit --audit-level=critical
+
+  python-audit:
+    name: Backend (Python) Audit
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install pip-audit
+        run: pip install pip-audit
+
+      - name: Audit Backend Dependencies
+        run: |
+          if [ -f "backend/requirements.txt" ]; then
+            pip-audit -r backend/requirements.txt
+          else
+            echo "No backend requirements.txt found, skipping Python audit."
+          fi
