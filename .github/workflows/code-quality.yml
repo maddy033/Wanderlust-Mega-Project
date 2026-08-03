@@ -2,9 +2,8 @@ name: Code Quality
 
 on:
   push:
-    branches: ["feat/wanderlust-mandar", "main"]
-  pull_request:
-    branches: ["main"]
+    branches: ["feat/wanderlust-mandar"]
+
 
 jobs:
   lint:
