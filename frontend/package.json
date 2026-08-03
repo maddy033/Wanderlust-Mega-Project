@@ -61,7 +61,6 @@
   },
   "overrides": {
   "form-data": "^4.0.4",
-  "mongoose": "^8.9.5",
   "tar": "^7.5.19"
 }
 }
