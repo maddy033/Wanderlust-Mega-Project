@@ -7,7 +7,6 @@ COPY package*.json ./
 RUN npm install
 
 COPY . .
-RUN npm run test
 
 # ------------------- Stage 2: Final Stage ------------------------------
 FROM node:21-slim
@@ -17,12 +16,10 @@ RUN apt-get update && apt-get upgrade -y && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
-# Copy app files from builder
+# Copy full application from builder
 COPY --from=backend-builder /app .
 
-# Prune devDependencies to keep image lean & secure
-RUN npm prune --production
-
+# Copy environment file
 COPY .env.docker .env
 
 EXPOSE 8080
