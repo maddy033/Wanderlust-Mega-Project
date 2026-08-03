@@ -5,8 +5,8 @@ WORKDIR /app
 
 COPY package*.json ./
 
-# Force regeneration of lockfile to pull new mongoose version and tar override
-RUN npm install --package-lock-only && npm update mongoose tar && npm install
+# Force delete old lockfile and install latest secure versions
+RUN rm -f package-lock.json && npm install tar@^7.5.19 && npm install
 
 COPY . .
 

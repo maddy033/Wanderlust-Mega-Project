@@ -5,8 +5,8 @@ WORKDIR /app
 
 COPY package*.json ./
 
-# Update package-lock.json with overrides and install dependencies
-RUN npm install --package-lock-only && npm update tar esbuild && npm install
+# Force delete old lockfile and install latest secure versions
+RUN rm -f package-lock.json && npm install tar@^7.5.19 esbuild@^0.21.5 && npm install
 
 COPY . .
 
@@ -19,6 +19,9 @@ RUN apt-get update && apt-get upgrade -y && rm -rf /var/lib/apt/lists/*
 WORKDIR /app
 
 COPY --from=frontend-builder /app .
+
+# Remove esbuild binary from final image to fix Go stdlib finding
+RUN rm -rf node_modules/@esbuild/linux-x64
 
 COPY .env.docker .env.local
 
