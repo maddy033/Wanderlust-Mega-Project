@@ -1,31 +1,38 @@
-# Stage 1
+# ------------------- Stage 1: Build Stage ------------------------------
 FROM node:21 AS backend-builder
 
-# setup the working dir
+# Setup the working directory
 WORKDIR /app
 
-# code
+# Copy package files first for cached layer installation
+COPY package*.json ./
+
+# Regenerate lockfile to respect overrides and install dependencies
+RUN npm install --package-lock-only && npm i
+
+# Copy remaining application code
 COPY . .
 
-# packages install
-RUN npm i
-
-# tests
+# Run tests
 RUN npm run test
 
-# Stage 2
+# ------------------- Stage 2: Final Stage ------------------------------
 FROM node:21-slim
 
-# setup the working dir
+# Upgrade base OS packages to patch libgnutls30 & system vulnerabilities
+RUN apt-get update && apt-get upgrade -y && rm -rf /var/lib/apt/lists/*
+
+# Setup the working directory
 WORKDIR /app
 
-# copy the above stage as compressed
+# Copy the build output from the builder stage
 COPY --from=backend-builder /app .
 
+# Copy environment variables
 COPY .env.docker .env
 
-# Port
+# Expose backend port
 EXPOSE 8080
 
-# App
+# Start the application
 CMD ["npm", "start"]

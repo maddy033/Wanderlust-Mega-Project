@@ -7,14 +7,17 @@ WORKDIR /app
 # Copy the package.json and package-lock.json for dependency installation
 COPY package*.json ./
 
-# Install dependencies
-RUN npm install
+# Regenerate lockfile to respect overrides and install dependencies
+RUN npm install --package-lock-only && npm install
 
 # Copy the rest of the application code
 COPY . .
 
 # ------------------- Stage 2: Final Stage ------------------------------
 FROM node:21-slim
+
+# Upgrade base OS packages to patch libgnutls30 & system vulnerabilities
+RUN apt-get update && apt-get upgrade -y && rm -rf /var/lib/apt/lists/*
 
 # Set the working directory to /app
 WORKDIR /app
