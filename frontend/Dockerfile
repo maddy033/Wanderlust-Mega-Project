@@ -5,11 +5,10 @@ WORKDIR /app
 
 COPY package*.json ./
 
-# Force lockfile regeneration to apply 'overrides' for tar and esbuild
-RUN npm install --package-lock-only && npm install
+# Update package-lock.json with overrides and install dependencies
+RUN npm install --package-lock-only && npm update tar esbuild && npm install
 
 COPY . .
-RUN npm run build
 
 # ------------------- Stage 2: Final Stage ------------------------------
 FROM node:21-slim
