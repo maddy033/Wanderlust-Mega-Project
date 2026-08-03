@@ -20,6 +20,7 @@ jobs:
       - name: Audit Frontend Dependencies
         run: |
           cd frontend
+          npm install --package-lock-only
           npm audit --audit-level=critical
 
   python-audit:
