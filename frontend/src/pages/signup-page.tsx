@@ -8,7 +8,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { toast } from 'react-toastify';
 
-function signin() {
+function Signup() {
   const navigate = useNavigate();
 
   const {
@@ -112,7 +112,7 @@ function signin() {
 
         <Link
           to={'/google-auth'}
-          className="flex w-full items-center justify-center space-x-2 rounded-lg border-2 border-b-4  border-gray-300 p-3 text-center hover:bg-gray-50 md:w-3/4 lg:w-2/5"
+          className="flex w-full items-center justify-center space-x-2 rounded-lg border-2 border-b-4 border-gray-300 p-3 text-center hover:bg-gray-50 md:w-3/4 lg:w-2/5"
         >
           <img className="h-4 w-6 pl-1 sm:h-5 sm:w-10" src={AddGoogleIcon} />
           <span className="text-sm sm:text-base">Continue with Google</span>
@@ -130,4 +130,4 @@ function signin() {
   );
 }
 
-export default signin;
+export default Signup;
