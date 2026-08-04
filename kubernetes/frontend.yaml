@@ -12,13 +12,12 @@ spec:
       app: frontend
   template:
     metadata:
-      name: frontend
       labels:
         app: frontend
     spec:
       containers:
         - name: frontend
-          image: trainwithshubham/wanderlust-frontend-beta:v2.2
+          image: mandar0333/wanderlust-frontend:latest
           ports:
             - containerPort: 5173
 ---
@@ -28,11 +27,10 @@ metadata:
   name: frontend-service
   namespace: wanderlust
 spec:
-  type: NodePort
-  selector:
-    app: frontend
+  type: LoadBalancer
   ports:
-    - port: 5173
+    - port: 80
       targetPort: 5173
       protocol: TCP
-      nodePort: 31000
+  selector:
+    app: frontend
