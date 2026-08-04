@@ -18,11 +18,11 @@ jobs:
           docker build -t wanderlust-frontend:latest ./frontend
 
       - name: Run Trivy Scanner on Frontend Image
-        uses: aquasecurity/trivy-action@v0.28.0
+        uses: aquasecurity/trivy-action@v0.36.0
         with:
           image-ref: 'wanderlust-frontend:latest'
           format: 'table'
-          exit-code: '0' # Set to '0' so vulnerabilities don't fail the job, or '1' if you WANT to break the pipeline on CRITICAL
+          exit-code: '0'
           ignore-unfixed: true
           scanners: 'vuln,secret'
           severity: 'CRITICAL'
@@ -40,11 +40,11 @@ jobs:
           docker build -t wanderlust-backend:latest ./backend
 
       - name: Run Trivy Scanner on Backend Image
-        uses: aquasecurity/trivy-action@v0.28.0
+        uses: aquasecurity/trivy-action@v0.36.0
         with:
           image-ref: 'wanderlust-backend:latest'
           format: 'table'
-          exit-code: '0' # Set to '0' so vulnerabilities don't fail the job, or '1' if you WANT to break the pipeline on CRITICAL
+          exit-code: '0'
           ignore-unfixed: true
           scanners: 'vuln,secret'
           severity: 'CRITICAL'
