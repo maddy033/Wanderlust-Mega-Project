@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: mandar0333/wanderlust-frontend:97e089b1dfd9c691d8039f0280bc9e2a81c0826a
+          image: mandar0333/wanderlust-frontend:7f67bef3ee3692799fc8d9cea270b2a7beab84ea
           ports:
             - containerPort: 5173
 ---
