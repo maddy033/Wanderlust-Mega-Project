@@ -3,7 +3,7 @@ name: DevSecOps Master Pipeline
 
 on:
   push:
-    branches: ["feat/wanderlust-*"]
+    branches: [feat/wanderlust-mandar]
   workflow_dispatch:
 
 jobs:
@@ -24,7 +24,7 @@ jobs:
   # Software Supply Chain & Dependency Vulnerability Scanning
   dependency-checks:
     name: Dependency Checks
-    uses: ./.github/workflows/dependency-scan.yml
+    uses: ./.github/workflows/dependancy-scan.yml
 
   # Dockerfile & Container Image Security (Trivy Scan)
   docker-checks:
