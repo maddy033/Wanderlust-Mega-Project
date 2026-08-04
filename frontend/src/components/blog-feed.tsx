@@ -9,8 +9,8 @@ import { categories } from '@/utils/category-colors';
 
 export default function BlogFeed() {
   const [selectedCategory, setSelectedCategory] = useState('featured');
-  const [posts, setPosts] = useState([]);
-  const [latestPosts, setLatestPosts] = useState([]);
+  const [posts, setPosts] = useState<any[]>([]);
+  const [latestPosts, setLatestPosts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -20,14 +20,20 @@ export default function BlogFeed() {
         : `/api/posts/categories/${selectedCategory}`;
 
     setLoading(true);
+
     axios
       .get(import.meta.env.VITE_API_PATH + categoryEndpoint)
       .then((response) => {
-        setPosts(response.data);
+        console.log('Featured API:', response.data);
+        console.log('Featured is array:', Array.isArray(response.data));
+
+        setPosts(Array.isArray(response.data) ? response.data : []);
         setLoading(false);
       })
       .catch((error) => {
-        console.error(error);
+        console.error('Featured API error:', error);
+        setPosts([]);
+        setLoading(false);
       });
   }, [selectedCategory]);
 
@@ -35,10 +41,14 @@ export default function BlogFeed() {
     axios
       .get(import.meta.env.VITE_API_PATH + '/api/posts/latest')
       .then((response) => {
-        setLatestPosts(response.data);
+        console.log('Latest API:', response.data);
+        console.log('Latest is array:', Array.isArray(response.data));
+
+        setLatestPosts(Array.isArray(response.data) ? response.data : []);
       })
       .catch((error) => {
-        console.error(error);
+        console.error('Latest API error:', error);
+        setLatestPosts([]);
       });
   }, []);
 
@@ -49,29 +59,40 @@ export default function BlogFeed() {
           <div className="-mb-1 cursor-text text-base tracking-wide text-slate-500 dark:text-dark-tertiary">
             What's hot?
           </div>
+
           <h1 className="mb-2 cursor-text text-xl font-semibold dark:text-dark-primary">
             {selectedCategory === 'featured'
               ? 'Featured Posts'
               : `Posts related to "${selectedCategory}"`}
           </h1>
+
           <div className="flex flex-col gap-6">
-            {posts.length === 0 || loading == true
-              ? Array(5)
-                  .fill(0)
-                  .map((_, index) => <FeaturedPostCardSkeleton key={index} />)
-              : posts
-                  .slice(0, 5)
-                  .map((post, index) => <FeaturedPostCard key={index} post={post} />)}
+            {posts.length === 0 || loading ? (
+              Array(5)
+                .fill(0)
+                .map((_, index) => (
+                  <FeaturedPostCardSkeleton key={index} />
+                ))
+            ) : (
+              posts
+                .slice(0, 5)
+                .map((post, index) => (
+                  <FeaturedPostCard key={index} post={post} />
+                ))
+            )}
           </div>
         </div>
+
         <div className="w-full p-4 md:w-1/3">
           <div className="mb-6">
-            <div className="-mb-1 cursor-text text-base tracking-wide text-light-tertiary dark:text-dark-tertiary">
+            <div className="-mb-1 cursor-text text-light-tertiary dark:text-dark-tertiary">
               Discover by topic
             </div>
+
             <h2 className="mb-2 cursor-text text-xl font-semibold dark:text-dark-primary">
               Categories
             </h2>
+
             <div className="flex flex-wrap gap-3 dark:rounded-lg dark:bg-dark-card dark:p-3">
               {categories.map((category) => (
                 <button
@@ -79,29 +100,43 @@ export default function BlogFeed() {
                   aria-label={category}
                   type="button"
                   onClick={() =>
-                    setSelectedCategory(selectedCategory === category ? 'featured' : category)
+                    setSelectedCategory(
+                      selectedCategory === category ? 'featured' : category
+                    )
                   }
                 >
-                  <CategoryPill category={category} selected={selectedCategory === category} />
+                  <CategoryPill
+                    category={category}
+                    selected={selectedCategory === category}
+                  />
                 </button>
               ))}
             </div>
           </div>
+
           <div>
-            <div className="-mb-1 cursor-text text-base tracking-wide text-slate-500 dark:text-dark-tertiary">
+            <div className="-mb-1 cursor-text text-slate-500 dark:text-dark-tertiary">
               What's new?
             </div>
+
             <h2 className="mb-2 cursor-text text-xl font-semibold dark:text-dark-primary">
               Latest Posts
             </h2>
+
             <div className="flex flex-col gap-4">
-              {latestPosts.length === 0
-                ? Array(5)
-                    .fill(0)
-                    .map((_, index) => <LatestPostCardSkeleton key={index} />)
-                : latestPosts
-                    .slice(0, 5)
-                    .map((post, index) => <LatestPostCard key={index} post={post} />)}
+              {latestPosts.length === 0 ? (
+                Array(5)
+                  .fill(0)
+                  .map((_, index) => (
+                    <LatestPostCardSkeleton key={index} />
+                  ))
+              ) : (
+                latestPosts
+                  .slice(0, 5)
+                  .map((post, index) => (
+                    <LatestPostCard key={index} post={post} />
+                  ))
+              )}
             </div>
           </div>
         </div>
