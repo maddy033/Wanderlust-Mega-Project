@@ -36,7 +36,7 @@ jobs:
   docker-push:
     name: Docker Build & Push
     needs: [code-quality, secret-scanning, dependency-checks, docker-checks]
-    uses: ./.github/workflows/docker-push.yml
+    uses: ./.github/workflows/docker-build-push.yml
     secrets: inherit
 
   ## ==========================================
