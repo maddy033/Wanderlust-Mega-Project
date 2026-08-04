@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: backend
-          image: mandar0333/wanderlust-backend:307c719bfa36aa4b33c8d2da24412eb8c8f20808
+          image: mandar0333/wanderlust-backend:2bfd0108dee0a518a4a533364f98596f7506ea7b
           ports:
             - containerPort: 8080
           env:
