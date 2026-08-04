@@ -1,11 +1,39 @@
-name: Deploy Application
+name: Update Kubernetes Manifest
 
 on:
   workflow_call:
 
+permissions:
+  contents: write
+
 jobs:
-  deploy-stub:
+  update-manifest:
+
     runs-on: ubuntu-latest
+
     steps:
-      - name: Deploy Placeholder
-        run: echo "Deployment stage placeholder ready for EC2 setup."
+
+    - name: Checkout
+      uses: actions/checkout@v4
+
+
+    - name: Update frontend image
+      run: |
+        sed -i "s|wanderlust-frontend:.*|wanderlust-frontend:${{ github.sha }}|" kubernetes/frontend.yaml
+
+
+    - name: Update backend image
+      run: |
+        sed -i "s|wanderlust-backend:.*|wanderlust-backend:${{ github.sha }}|" kubernetes/backend.yaml
+
+
+    - name: Commit changes
+      run: |
+        git config user.name "github-actions"
+        git config user.email "github-actions@github.com"
+
+        git add kubernetes/
+
+        git commit -m "Update image tag ${{ github.sha }}" || echo "No changes"
+
+        git push

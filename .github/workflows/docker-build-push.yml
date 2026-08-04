@@ -31,4 +31,4 @@ jobs:
           context: ./${{ matrix.folders }}
           push: true
           # Updated tag to wanderlust
-          tags: ${{ vars.DOCKERHUB_USERNAME }}/wanderlust-${{ matrix.folders }}:latest
+          tags: ${{ vars.DOCKERHUB_USERNAME }}/wanderlust-${{ matrix.folders }}:${{ github.sha }}
