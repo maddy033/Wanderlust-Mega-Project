@@ -1,0 +1,11 @@
+name: Deploy Application
+
+on:
+  workflow_call:
+
+jobs:
+  deploy-stub:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy Placeholder
+        run: echo "Deployment stage placeholder ready for EC2 setup."

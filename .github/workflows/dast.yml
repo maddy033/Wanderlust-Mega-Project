@@ -1,0 +1,11 @@
+name: DAST Scan
+
+on:
+  workflow_call:
+
+jobs:
+  dast-stub:
+    runs-on: ubuntu-latest
+    steps:
+      - name: DAST Scan Placeholder
+        run: echo "DAST scanning stage placeholder."
