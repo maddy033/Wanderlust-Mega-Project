@@ -10,7 +10,7 @@ COPY package.json ./
 RUN npm install -g npm@10.8.2
 
 # Install dependencies forcing secure tar
-RUN npm install tar@^7.5.19 && npm install
+RUN npm install tar@7.5.19 && npm install
 
 COPY . .
 
