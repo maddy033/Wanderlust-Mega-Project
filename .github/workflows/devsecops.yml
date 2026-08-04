@@ -5,6 +5,8 @@ on:
   push:
     branches: [feat/wanderlust-mandar]
   workflow_dispatch:
+permissions:
+  contents: write    
 
 jobs:
   ## ==========================================
