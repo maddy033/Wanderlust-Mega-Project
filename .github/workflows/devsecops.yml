@@ -1,0 +1,58 @@
+# Goal: Run End-to-End DevSecOps CI/CD Pipeline
+name: DevSecOps Master Pipeline
+
+on:
+  push:
+    branches: ["feat/wanderlust-*"]
+  workflow_dispatch:
+
+jobs:
+  ## ==========================================
+  ##               1. CI STAGE
+  ## ==========================================
+
+  # Code Quality & Static Analysis
+  code-quality:
+    name: Code Quality
+    uses: ./.github/workflows/code-quality.yml
+
+  # Secret Scanning (Leaks & Passwords)
+  secret-scanning:
+    name: Secret Scanning
+    uses: ./.github/workflows/secret-scanning.yml
+
+  # Software Supply Chain & Dependency Vulnerability Scanning
+  dependency-checks:
+    name: Dependency Checks
+    uses: ./.github/workflows/dependency-scan.yml
+
+  # Dockerfile & Container Image Security (Trivy Scan)
+  docker-checks:
+    name: Docker Image Scanning
+    uses: ./.github/workflows/docker-scan.yml
+    secrets: inherit
+
+  # Build & Push Docker Images to Docker Hub
+  docker-push:
+    name: Docker Build & Push
+    needs: [code-quality, secret-scanning, dependency-checks, docker-checks]
+    uses: ./.github/workflows/docker-push.yml
+    secrets: inherit
+
+  ## ==========================================
+  ##               2. CD STAGE
+  ## ==========================================
+
+  # Deploy Application to Target Environment
+  deploy:
+    name: Deployment
+    needs: [docker-push]
+    uses: ./.github/workflows/deploy.yml
+    secrets: inherit
+
+  # Dynamic Application Security Testing (DAST)
+  dast-scan:
+    name: DAST Security Testing
+    needs: [deploy]
+    uses: ./.github/workflows/dast.yml
+    secrets: inherit
